@@ -47,7 +47,7 @@ type TestingSuiteSubscriber interface {
 func RunSubscriberTestSuite(t *testing.T, suite TestingSuiteSubscriber) {
 	suite.SetT(t)
 
-	RunTestCase(t, suite, func(appUnderTest AppUnderTest) {
+	runAppTestCase(t, suite, func(appUnderTest AppUnderTest) {
 		testCases := suite.SetupTestCases()
 		suite.TestSubscriber(appUnderTest, testCases)
 	})

@@ -23,7 +23,7 @@ func RunSuite(t *testing.T, suite TestingSuite) {
 			continue
 		}
 
-		RunTestCase(t, suite, func(appUnderTest AppUnderTest) {
+		runAppTestCase(t, suite, func(appUnderTest AppUnderTest) {
 			method.Func.Call([]reflect.Value{reflect.ValueOf(suite), reflect.ValueOf(appUnderTest)})
 		})
 	}
@@ -47,7 +47,7 @@ func filterTestMethod(t *testing.T, method reflect.Method) bool {
 	return true
 }
 
-func RunTestCase(t *testing.T, suite TestingSuite, testCase func(appUnderTest AppUnderTest), extraOptions ...SuiteOption) {
+func runAppTestCase(t *testing.T, suite TestingSuite, testCase func(appUnderTest AppUnderTest), extraOptions ...SuiteOption) {
 	suiteOptions := &suiteOptions{}
 
 	setupOptions := []SuiteOption{
@@ -88,9 +88,7 @@ func RunTestCase(t *testing.T, suite TestingSuite, testCase func(appUnderTest Ap
 		}
 	}
 
-	appOptions := environment.ApplicationOptions()
-	appOptions = append(suiteOptions.appOptions, appOptions...)
-	appOptions = append(appOptions, []application.Option{
+	appOptions := append(suiteOptions.appOptions, []application.Option{
 		application.WithProducerDaemon,
 		application.WithConfigMap(map[string]interface{}{
 			"env": "test",

@@ -2,7 +2,6 @@ package env
 
 import (
 	"fmt"
-	"github.com/applike/gosoline/pkg/application"
 	"github.com/applike/gosoline/pkg/cfg"
 	"github.com/applike/gosoline/pkg/clock"
 	"github.com/applike/gosoline/pkg/mon"
@@ -11,8 +10,9 @@ import (
 )
 
 type Environment struct {
-	configOptions []ConfigOption
-	loggerOptions []LoggerOption
+	componentOptions []ComponentOption
+	configOptions    []ConfigOption
+	loggerOptions    []LoggerOption
 
 	t          *testing.T
 	config     cfg.GosoConf
@@ -61,6 +61,12 @@ func NewEnvironment(t *testing.T, options ...Option) (*Environment, error) {
 	var components = NewComponentsContainer()
 	var componentConfigManger = NewComponentsConfigManager(config)
 
+	for _, opt := range env.componentOptions {
+		if err := opt(componentConfigManger); err != nil {
+			return nil, fmt.Errorf("can apply component option: %w", err)
+		}
+	}
+
 	for typ, factory := range componentFactories {
 		if err = factory.Detect(config, componentConfigManger); err != nil {
 			return env, fmt.Errorf("can not autodetect components for %s: %w", typ, err)
@@ -86,9 +92,17 @@ func NewEnvironment(t *testing.T, options ...Option) (*Environment, error) {
 		components.Add(skeleton.typ, skeleton.name, component)
 	}
 
+	if err = config.Option(components.GetCfgOptions()...); err != nil {
+		return nil, fmt.Errorf("can not apply cfg options from components: %w", err)
+	}
+
 	env.components = components
 
 	return env, nil
+}
+
+func (e *Environment) addComponentOption(opt ComponentOption) {
+	e.componentOptions = append(e.componentOptions, opt)
 }
 
 func (e *Environment) addConfigOption(opt ConfigOption) {
@@ -101,10 +115,6 @@ func (e *Environment) addLoggerOption(opt LoggerOption) {
 
 func (e *Environment) Stop() error {
 	return e.runner.Stop()
-}
-
-func (e *Environment) ApplicationOptions() []application.Option {
-	return e.components.GetApplicationOptions()
 }
 
 func (e *Environment) Config() cfg.GosoConf {
@@ -134,8 +144,8 @@ func (e *Environment) Component(typ string, name string) Component {
 	return component
 }
 
-func (e *Environment) DynamoDb(name string) *ddbComponent {
-	return e.Component(componentDdb, name).(*ddbComponent)
+func (e *Environment) DynamoDb(name string) *DdbComponent {
+	return e.Component(componentDdb, name).(*DdbComponent)
 }
 
 func (e *Environment) Localstack(name string) *localstackComponent {
@@ -156,4 +166,8 @@ func (e *Environment) StreamInput(name string) *streamInputComponent {
 
 func (e *Environment) StreamOutput(name string) *streamOutputComponent {
 	return e.Component(componentStreamOutput, name).(*streamOutputComponent)
+}
+
+func (e *Environment) Toxiproxy(name string) *ToxiproxyComponent {
+	return e.Component(componentToxiproxy, name).(*ToxiproxyComponent)
 }

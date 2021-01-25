@@ -15,10 +15,11 @@ func init() {
 }
 
 const (
-	ComponentLocalstack  = "localstack"
-	localstackServiceS3  = "s3"
-	localstackServiceSns = "sns"
-	localstackServiceSqs = "sqs"
+	ComponentLocalstack         = "localstack"
+	localstackServiceCloudWatch = "cloudwatch"
+	localstackServiceS3         = "s3"
+	localstackServiceSns        = "sns"
+	localstackServiceSqs        = "sqs"
 )
 
 type localstackSettings struct {
@@ -42,6 +43,10 @@ func (f *localstackFactory) Detect(config cfg.Config, manager *ComponentsConfigM
 	}
 
 	services := make([]string, 0)
+
+	if config.IsSet("cloud.aws.cloudwatch") {
+		services = append(services, localstackServiceCloudWatch)
+	}
 
 	if config.IsSet("aws_s3_endpoint") {
 		services = append(services, localstackServiceS3)
@@ -82,7 +87,7 @@ func (f *localstackFactory) ConfigureContainer(settings interface{}) *containerC
 
 	return &containerConfig{
 		Repository: "localstack/localstack",
-		Tag:        "0.11.3",
+		Tag:        "0.12.5",
 		Env: []string{
 			fmt.Sprintf("SERVICES=%s", services),
 			fmt.Sprintf("DEFAULT_REGION=%s", s.Region),
@@ -141,8 +146,9 @@ func (f *localstackFactory) Component(config cfg.Config, logger mon.Logger, cont
 	s := settings.(*localstackSettings)
 
 	component := &localstackComponent{
-		binding: container.bindings["4566/tcp"],
-		region:  s.Region,
+		services: s.Services,
+		binding:  container.bindings["4566/tcp"],
+		region:   s.Region,
 	}
 
 	return component, nil

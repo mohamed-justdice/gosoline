@@ -32,7 +32,7 @@ func RunStreamTestSuite(t *testing.T, suite TestingSuiteStream) {
 	testCases := suite.SetupTestCases()
 
 	for _, tc := range testCases {
-		RunTestCase(t, suite, func(appUnderTest AppUnderTest) {
+		runAppTestCase(t, suite, func(appUnderTest AppUnderTest) {
 			suite.TestStreamCase(appUnderTest, tc)
 		})
 	}

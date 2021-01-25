@@ -2,7 +2,6 @@ package env
 
 import (
 	"fmt"
-	"github.com/applike/gosoline/pkg/application"
 	"github.com/applike/gosoline/pkg/cfg"
 	"github.com/applike/gosoline/pkg/mon"
 	"github.com/stretchr/testify/assert"
@@ -65,8 +64,12 @@ type Component interface {
 	SetT(t *testing.T)
 }
 
-type ComponentAppOptionAware interface {
-	AppOptions() []application.Option
+type ComponentAddressAware interface {
+	Address() string
+}
+
+type ComponentCfgOptionAware interface {
+	CfgOptions() []cfg.Option
 }
 
 type baseComponent struct {

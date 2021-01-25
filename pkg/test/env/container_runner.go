@@ -22,6 +22,7 @@ type containerConfig struct {
 	Env          []string
 	Cmd          []string
 	PortBindings portBindings
+	ExposedPorts []string
 	ExpireAfter  time.Duration
 }
 
@@ -159,12 +160,14 @@ func (r *containerRunner) RunContainer(skeleton *componentSkeleton) (*container,
 		Env:          config.Env,
 		Cmd:          config.Cmd,
 		PortBindings: bindings,
+		ExposedPorts: config.ExposedPorts,
 		Auth:         r.settings.Auth.GetAuthConfig(),
 	}
 
 	tmpfsConfig := r.getTmpfsConfig(config.Tmpfs)
 
 	resource, err := r.pool.RunWithOptions(runOptions, func(hc *docker.HostConfig) {
+		hc.AutoRemove = true
 		hc.Tmpfs = tmpfsConfig
 	})
 

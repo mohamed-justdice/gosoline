@@ -1,0 +1,16 @@
+cloud:
+  aws:
+    defaults:
+      region: bla
+
+    dynamodb:
+      clients:
+        default: ~
+
+test:
+  components:
+    - name: default
+      type: ddb
+
+    - name: default
+      type: toxiproxy

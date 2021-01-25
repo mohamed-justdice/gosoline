@@ -3650,6 +3650,84 @@ func (_m *ECSAPI) UntagResourceWithContext(_a0 context.Context, _a1 *ecs.UntagRe
 	return r0, r1
 }
 
+// UpdateCapacityProvider provides a mock function with given fields: _a0
+func (_m *ECSAPI) UpdateCapacityProvider(_a0 *ecs.UpdateCapacityProviderInput) (*ecs.UpdateCapacityProviderOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *ecs.UpdateCapacityProviderOutput
+	if rf, ok := ret.Get(0).(func(*ecs.UpdateCapacityProviderInput) *ecs.UpdateCapacityProviderOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ecs.UpdateCapacityProviderOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*ecs.UpdateCapacityProviderInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// UpdateCapacityProviderRequest provides a mock function with given fields: _a0
+func (_m *ECSAPI) UpdateCapacityProviderRequest(_a0 *ecs.UpdateCapacityProviderInput) (*request.Request, *ecs.UpdateCapacityProviderOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*ecs.UpdateCapacityProviderInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *ecs.UpdateCapacityProviderOutput
+	if rf, ok := ret.Get(1).(func(*ecs.UpdateCapacityProviderInput) *ecs.UpdateCapacityProviderOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*ecs.UpdateCapacityProviderOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+// UpdateCapacityProviderWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *ECSAPI) UpdateCapacityProviderWithContext(_a0 context.Context, _a1 *ecs.UpdateCapacityProviderInput, _a2 ...request.Option) (*ecs.UpdateCapacityProviderOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *ecs.UpdateCapacityProviderOutput
+	if rf, ok := ret.Get(0).(func(context.Context, *ecs.UpdateCapacityProviderInput, ...request.Option) *ecs.UpdateCapacityProviderOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ecs.UpdateCapacityProviderOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *ecs.UpdateCapacityProviderInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UpdateClusterSettings provides a mock function with given fields: _a0
 func (_m *ECSAPI) UpdateClusterSettings(_a0 *ecs.UpdateClusterSettingsInput) (*ecs.UpdateClusterSettingsOutput, error) {
 	ret := _m.Called(_a0)

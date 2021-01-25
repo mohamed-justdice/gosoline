@@ -74,7 +74,7 @@ func RunApiServerTestSuite(t *testing.T, suite TestingSuiteApiServer) {
 		}),
 	}
 
-	RunTestCase(t, suite, testcase, extraOptions...)
+	runAppTestCase(t, suite, testcase, extraOptions...)
 }
 
 type ApiServerTestSuite struct {
