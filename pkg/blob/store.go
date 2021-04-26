@@ -57,7 +57,7 @@ type S3API interface {
 	s3iface.S3API
 }
 
-//go:generate mockery -name Store
+//go:generate mockery --name Store
 type Store interface {
 	BucketName() string
 	Copy(batch CopyBatch)
